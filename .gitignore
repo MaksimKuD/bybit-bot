@@ -1,0 +1,17 @@
+# binaries
+bot
+*.exe
+
+# logs
+*.log
+
+# configs / secrets
+*.env
+config.yaml
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
