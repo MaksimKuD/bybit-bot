@@ -1,4 +1,3 @@
-// internal/strategy/strategy.go
 package strategy
 
 import "time"
@@ -17,6 +16,7 @@ type Signal string
 const (
 	BUY  Signal = "BUY"
 	SELL Signal = "SELL"
+	EXIT Signal = "EXIT"
 	HOLD Signal = "HOLD"
 )
 

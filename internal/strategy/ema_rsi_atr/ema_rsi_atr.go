@@ -74,7 +74,7 @@ func (s *Strategy) OnCandle(c strategy.Candle) strategy.Signal {
 	// 4️⃣ выход
 	if s.inPosition {
 		if s.checkExit(c, currentATR) {
-			return strategy.HOLD
+			return strategy.EXIT
 		}
 	}
 

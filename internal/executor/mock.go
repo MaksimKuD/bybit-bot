@@ -29,12 +29,25 @@ func (e *MockExecutor) OnSignal(signal strategy.Signal, price float64) error {
 		}
 
 	case strategy.SELL:
+		if e.side == SideNone {
+			e.side = SideShort
+			e.entryPrice = price
+			log.Println("MOCK: OPEN SHORT @", price)
+		}
+
+	case strategy.EXIT:
 		if e.side == SideLong {
 			pnl := price - e.entryPrice
 			e.realizedPnL += pnl
-			e.unrealizedPnL = 0
 			e.side = SideNone
 			log.Println("MOCK: CLOSE LONG @", price, "PnL:", pnl)
+		}
+
+		if e.side == SideShort {
+			pnl := e.entryPrice - price
+			e.realizedPnL += pnl
+			e.side = SideNone
+			log.Println("MOCK: CLOSE SHORT @", price, "PnL:", pnl)
 		}
 	}
 

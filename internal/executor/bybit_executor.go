@@ -20,15 +20,13 @@ func NewBybitExecutor() *BybitExecutor {
 
 func (e *BybitExecutor) OnSignal(signal strategy.Signal, price float64) error {
 
-	// ⚠️ ШАГ 10.1:
-	// Пока НИЧЕГО не торгуем
-	// Только логируем сигналы
-
 	switch signal {
 	case strategy.BUY:
-		log.Println("BYBIT EXECUTOR: BUY signal received (not executed)")
+		log.Println("BYBIT EXECUTOR: BUY (not executed)")
 	case strategy.SELL:
-		log.Println("BYBIT EXECUTOR: SELL signal received (not executed)")
+		log.Println("BYBIT EXECUTOR: SELL (not executed)")
+	case strategy.EXIT:
+		log.Println("BYBIT EXECUTOR: EXIT (not executed)")
 	}
 
 	return nil
