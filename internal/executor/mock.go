@@ -14,7 +14,10 @@ type MockExecutor struct {
 }
 
 func NewMockExecutor() *MockExecutor {
-	return &MockExecutor{side: SideNone}
+	return &MockExecutor{
+		side:       SideNone,
+		entryPrice: 0,
+	}
 }
 
 func (e *MockExecutor) OnSignal(signal strategy.Signal, price float64) error {
@@ -25,6 +28,7 @@ func (e *MockExecutor) OnSignal(signal strategy.Signal, price float64) error {
 		if e.side == SideNone {
 			e.side = SideLong
 			e.entryPrice = price
+			e.unrealizedPnL = 0
 			log.Println("MOCK: OPEN LONG @", price)
 		}
 
@@ -32,6 +36,7 @@ func (e *MockExecutor) OnSignal(signal strategy.Signal, price float64) error {
 		if e.side == SideNone {
 			e.side = SideShort
 			e.entryPrice = price
+			e.unrealizedPnL = 0
 			log.Println("MOCK: OPEN SHORT @", price)
 		}
 
@@ -39,14 +44,23 @@ func (e *MockExecutor) OnSignal(signal strategy.Signal, price float64) error {
 		if e.side == SideLong {
 			pnl := price - e.entryPrice
 			e.realizedPnL += pnl
-			e.side = SideNone
-			log.Println("MOCK: CLOSE LONG @", price, "PnL:", pnl)
-		}
 
-		if e.side == SideShort {
+			// СБРОС ПОЗИЦИИ
+			e.side = SideNone
+			e.entryPrice = 0
+			e.unrealizedPnL = 0
+
+			log.Println("MOCK: CLOSE LONG @", price, "PnL:", pnl)
+
+		} else if e.side == SideShort {
 			pnl := e.entryPrice - price
 			e.realizedPnL += pnl
+
+			// СБРОС ПОЗИЦИИ
 			e.side = SideNone
+			e.entryPrice = 0
+			e.unrealizedPnL = 0
+
 			log.Println("MOCK: CLOSE SHORT @", price, "PnL:", pnl)
 		}
 	}
